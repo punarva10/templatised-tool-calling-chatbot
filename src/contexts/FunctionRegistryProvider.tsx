@@ -1,13 +1,25 @@
 'use client'
 
 import React, { createContext, useContext, ReactNode } from 'react'
-import { functionRegistry } from '../lib/functionRegistry'
+import { FunctionDefinition, functionRegistry } from '../lib/functionRegistry'
 
-const FunctionRegistryContext = createContext<typeof functionRegistry | null>(null)
+type FunctionRegistryContextType = {
+  registerFunction: (func: FunctionDefinition) => void;
+  getFunction: (name: string) => FunctionDefinition | undefined;
+  getAllFunctions: () => FunctionDefinition[];
+}
+
+const FunctionRegistryContext = createContext<FunctionRegistryContextType | null>(null)
 
 export function FunctionRegistryProvider({ children }: { children: ReactNode }) {
+  const value: FunctionRegistryContextType = {
+    registerFunction: functionRegistry.registerFunction.bind(functionRegistry),
+    getFunction: functionRegistry.getFunction.bind(functionRegistry),
+    getAllFunctions: functionRegistry.getAllFunctions.bind(functionRegistry),
+  }
+
   return (
-    <FunctionRegistryContext.Provider value={functionRegistry}>
+    <FunctionRegistryContext.Provider value={value}>
       {children}
     </FunctionRegistryContext.Provider>
   )

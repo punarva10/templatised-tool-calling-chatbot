@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-type FunctionDefinition = {
+export type FunctionDefinition = {
   name: string;
   description: string;
-  parameters: string;
+  parameters: Record<string, unknown>;
   logic: (args: any) => Promise<{ message: string; ui?: string; props?: any }>;
 }
 
@@ -26,7 +26,7 @@ class FunctionRegistry {
       {
         name: 'get_weather',
         description: 'Get the weather for a specific location',
-        parameters: `{
+        parameters: {
           type: 'object',
           properties: {
             location: {
@@ -35,7 +35,7 @@ class FunctionRegistry {
             },
           },
           required: ['location'],
-        }`,
+        },
         logic: async ({ location }) => {
           // This would typically involve calling a weather API
           const weather = Math.random() > 0.5 ? 'sunny' : 'rainy';
@@ -49,7 +49,7 @@ class FunctionRegistry {
       {
         name: 'get_time',
         description: 'Get the current time for a specific timezone',
-        parameters: `{
+        parameters: {
           type: 'object',
           properties: {
             timezone: {
@@ -58,7 +58,7 @@ class FunctionRegistry {
             },
           },
           required: ['timezone'],
-        }`,
+        },
         logic: async ({ timezone }) => {
           const time = new Date().toLocaleString('en-US', { timeZone: timezone });
           return {
